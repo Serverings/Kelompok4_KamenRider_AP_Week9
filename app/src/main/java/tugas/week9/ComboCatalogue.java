@@ -17,9 +17,14 @@ public class ComboCatalogue {
         rules.add(new ComboRule("Burakawani", CoreMedal.COBRA, CoreMedal.KAME, CoreMedal.WANI, "BURA-KA-WANI!"));
     }
 
-    public ComboRule findMatch(CoreMedal h, CoreMedal a, CoreMedal l) {
+   public ComboRule findMatchAnyOrder(List<CoreMedal> inputMedals) {
         for (ComboRule rule : rules) {
-            if (rule.matches(h, a, l)) return rule;
+            // Cek apakah list input mengandung semua koin yang dibutuhkan rule tersebut
+            if (inputMedals.contains(rule.getHead()) && 
+                inputMedals.contains(rule.getArms()) && 
+                inputMedals.contains(rule.getLegs())) {
+                return rule;
+            }
         }
         return null;
     }

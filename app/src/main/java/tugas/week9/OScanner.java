@@ -5,7 +5,7 @@ public class OScanner {
 
     public void scan(OOODriver driver) {
         try {
-            TransformationResult result = engine.process(driver.getActiveMedals());
+            TransformationResult result = engine.process(driver.getSlots());
             result.display();
         } catch (InvalidMedalException e) {
             System.out.println("SCAN ERROR: " + e.getMessage());

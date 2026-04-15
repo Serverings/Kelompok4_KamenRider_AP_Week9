@@ -1,40 +1,38 @@
 package tugas.week9;
 
-import java.util.Map;
+import java.util.*;
 
 public class TransformationEngine {
     private ComboCatalogue catalogue = new ComboCatalogue();
     private String lastState = "";
 
-   public TransformationResult process(Map<MedalSlot, CoreMedal> slots) throws InvalidMedalException {
-    if (slots.size() < 3) {
-        throw new InvalidMedalException("Incomplete Medals! Need 3 medals to scan.");
-    }
+    public TransformationResult process(CoreMedal[] slots) throws InvalidMedalException {
+        // 1. Cek Kelengkapan (Harus ada 3 koin)
+        List<CoreMedal> currentMedals = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            if (slots[i] == null) {
+                throw new InvalidMedalException("Slot " + (i + 1) + " masih kosong! Butuh 3 medal untuk scan.");
+            }
+            currentMedals.add(slots[i]);
+        }
 
-    CoreMedal h = slots.get(MedalSlot.HEAD);
-    CoreMedal a = slots.get(MedalSlot.ARMS);
-    CoreMedal l = slots.get(MedalSlot.LEGS);
+        // Buat ID unik untuk cek Re-scan (Urutan tetap penting untuk ID status)
+        String currentState = slots.toString() + slots.toString() + slots.toString();
 
-    String currentState = h.toString() + a.toString() + l.toString();
-    ComboRule match = catalogue.findMatch(h, a, l);
+        // 2. Cari di Katalog (Cek apakah 3 koin tersebut membentuk combo spesial)
+        ComboRule match = catalogue.findMatchAnyOrder(currentMedals);
 
-    // LOGIC BARU: Cek Scanning Charge
-    if (currentState.equals(lastState)) {
-        // Hanya boleh Scanning Charge kalau match (Full Combo)
+        // 3. Logika Scanning Charge
+        if (currentState.equals(lastState) && match != null) {
+            return new TransformationResult("SCANNING CHARGE! " + match.getChant(), true);
+        }
+        lastState = currentState;
+
+        // 4. Output Hasil
         if (match != null) {
-            return new TransformationResult("SCANNING CHARGE! " + match.getName().toUpperCase() + " VICTORY!", true);
+            return new TransformationResult(match.getChant() + "\n" + match.getName().toUpperCase() + " COMBO!", true);
         } else {
-            // Kalau Mixed Form discan ulang, tetap Mixed Form (atau beri pesan error)
-            return new TransformationResult("Mixed Form detected. No Finishing Move available for mixed states.", false);
+            return new TransformationResult("MIXED FORM!", false);
         }
     }
-
-    lastState = currentState;
-
-    if (match != null) {
-        return new TransformationResult(match.getChant() + "\n" + match.getName().toUpperCase() + " COMBO!", true);
-    } else {
-        return new TransformationResult("MIXED FORM!", false);
-    }
-}
 }
