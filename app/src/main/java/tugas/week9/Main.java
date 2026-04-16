@@ -6,6 +6,7 @@ public class Main {
     public static void main(String[] args) {
         OOODriver driver = new OOODriver();
         Scanner input = new Scanner(System.in);
+        OScanner scanner = new OScanner(); 
 
         System.out.println("=== Kougami Foundation: OOO Driver Simulator ===");
 
@@ -15,11 +16,23 @@ public class Main {
             String choice = input.nextLine();
 
             if (choice.equals("1")) {
-                // INSERT MEDAL
-                System.out.println("\nAvailable Medals:");
-                System.out.println("HEAD: TAKA, KUWAGATA, LION, SAI, SHACHI, PTERA, COBRA");
-                System.out.println("ARMS: TORA, KAMAKIRI, GORILLA, UNAGI, KUJAKU, TRICERA, KAME");
-                System.out.println("LEGS: BATTA, CHEETAH, ZOU, TAKO, CONDOR, TYRANNO, WANI");
+                System.out.println("\n--- Available Medals ---");
+                
+                System.out.print("HEAD: ");
+                for (CoreMedal m : CoreMedal.values()) {
+                    if (m.getEligibleSlot() == MedalSlot.HEAD) System.out.print(m + " ");
+                }
+                
+                System.out.print("\nARMS: ");
+                for (CoreMedal m : CoreMedal.values()) {
+                    if (m.getEligibleSlot() == MedalSlot.ARMS) System.out.print(m + " ");
+                }
+
+                System.out.print("\nLEGS: ");
+                for (CoreMedal m : CoreMedal.values()) {
+                    if (m.getEligibleSlot() == MedalSlot.LEGS) System.out.print(m + " ");
+                }
+                System.out.println("\n------------------------");
                 
                 try {
                     System.out.print("Pilih Slot (1-3): ");
@@ -32,34 +45,28 @@ public class Main {
                 } catch (NumberFormatException e) {
                     System.out.println("Error: Slot harus berupa angka 1-3!");
                 } catch (IllegalArgumentException e) {
-                    System.out.println("Error: Nama Medal tidak valid!");
+                    System.out.println("Error: Nama Medal tidak terdaftar!");
                 } catch (InvalidMedalException e) {
                     System.out.println("Error: " + e.getMessage());
                 }
                 
             } else if (choice.equals("2")) {
-                // SCAN
-                OScanner scanner = new OScanner();
                 scanner.scan(driver);
-
             
             } else if (choice.equals("3")) {
-                // EJECT MEDAL
                 try {
                     System.out.print("Pilih Slot yang ingin di-eject (1-3): ");
                     int ejectIdx = Integer.parseInt(input.nextLine());
                     driver.ejectMedal(ejectIdx);
-                } catch (NumberFormatException e) {
-                    System.out.println("Error: Slot harus berupa angka 1-3!");
-                } catch (InvalidMedalException e) {
+                } catch (Exception e) {
                     System.out.println("Error: " + e.getMessage());
                 }
                 
             } else if (choice.equals("4")) {
-                System.out.println("Terima kasih! Henshin!");
+                System.out.println("Terima kasih! Happy Henshin!");
                 break;
             } else {
-                System.out.println("Pilihan tidak valid! Pilih 1-4.");
+                System.out.println("Pilihan tidak valid!");
             }
         }
         input.close();

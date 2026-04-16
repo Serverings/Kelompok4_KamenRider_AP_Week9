@@ -19,7 +19,6 @@ public class ComboCatalogue {
 
    public ComboRule findMatchAnyOrder(List<CoreMedal> inputMedals) {
         for (ComboRule rule : rules) {
-            // Cek apakah list input mengandung semua koin yang dibutuhkan rule tersebut
             if (inputMedals.contains(rule.getHead()) && 
                 inputMedals.contains(rule.getArms()) && 
                 inputMedals.contains(rule.getLegs())) {
