@@ -1,16 +1,16 @@
-package tugas.week9;
+    package tugas.week9;
 
-import java.util.ArrayList;
-import java.util.List;
+    import java.util.ArrayList;
+    import java.util.List;
 
-public class MedalRepository<T> {
-    private List<T> items = new ArrayList<>();
+    public class MedalRepository<T> {
+        private List<T> items = new ArrayList<>();
 
-    public void add(T item) {
-        items.add(item);
+        public void add(T item) {
+            items.add(item);
+        }
+
+        public List<T> getAll() {
+            return items;
+        }
     }
-
-    public List<T> getAll() {
-        return items;
-    }
-}

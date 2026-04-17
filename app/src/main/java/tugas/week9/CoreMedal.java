@@ -22,4 +22,4 @@ public enum CoreMedal {
     public MedalSlot getEligibleSlot() {
         return eligibleSlot;
     }
-}
+}   
